@@ -1,0 +1,12 @@
+[project]
+name = "flet_ping_network"
+version = "0.1.0"
+description = "A Flet app for pinging and network diagnostics"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "flet>=0.82.0",
+]
+
+[tool.flet]
+app_path = "main.py"

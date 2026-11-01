@@ -1,0 +1,45 @@
+name: Build Flet iOS App
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  workflow_dispatch: # 支持手动在网页点击触发打包
+
+jobs:
+  build-ios:
+    name: Build iOS IPA
+    runs-on: macos-latest # 必须使用 macOS 虚拟机
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Flet and Dependencies
+        run: |
+          pip install --upgrade pip
+          pip install flet
+
+      - name: Set up Flutter (Required by Flet mobile build)
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.19.x'
+          cache: true
+
+      - name: Initialize Flet Mobile Project
+        run: |
+          flet create . --project-name flet_ping_network --force
+
+      - name: Build iOS IPA
+        run: |
+          flet build ipa --verbose
+
+      - name: Upload IPA Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: flet-ping-ios-ipa
+          path: build/ios/ipa/*.ipa
