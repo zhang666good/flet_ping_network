@@ -8,7 +8,7 @@ on:
 jobs:
   build-ios:
     name: Build iOS IPA
-    runs-on: macos-latest
+    runs-on: macos-13
 
     steps:
       - name: Checkout code
@@ -31,16 +31,11 @@ jobs:
           channel: 'stable'
           cache: true
 
-      - name: Enable Flutter iOS
-        run: |
-          flutter config --enable-ios
-          flutter doctor
-
       - name: Initialize Flet Mobile Project
         run: |
           flet create . --project-name flet_ping_network --force
 
-      - name: Build iOS IPA (No Codesign for CI check)
+      - name: Build iOS IPA
         run: |
           flet build ipa --no-codesign --verbose
 
